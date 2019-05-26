@@ -1,5 +1,6 @@
 import * as JsStore from "jsstore";
 import * as SqlWeb from 'sqlweb';
+const $ =  require('jquery');
 
 // バックグラウンドで動かすためのWeb workerの設定
 const workerPath = require("file-loader?name=scripts/jsstore.worker.js!../node_modules/jsstore/dist/jsstore.worker");
@@ -78,3 +79,37 @@ club STRING NOTNULL
     const dbCreatequery = db + tblSampleQry;
     return dbCreatequery;
 }
+
+// 表の動的作成
+function makeTable(){
+    var sql = $('#sql-form [name=sql-form]').val();
+    console.log(sql);
+    // 表を一旦削除
+    document.getElementById("table").textContent = null;
+    // 表の作成開始
+    var rows=[];
+    var table = document.createElement("table");
+
+    getTbData().then(data=>{
+        console.log(data);
+        console.log(Object.keys(data[0]).length);
+        // 表に2次元配列の要素を格納
+        for(var i = 0; i < data.length; i++){
+            rows.push(table.insertRow(-1));  // 行の追加
+            //console.log(rows);
+            for(var row in data[i]){
+                console.log(row);
+                var cell=rows[i].insertCell(-1);
+                cell.appendChild(document.createTextNode(data[i][row]));
+            }
+        }
+        // 指定したdiv要素に表を加える
+        document.getElementById("table").appendChild(table);
+    });
+}
+
+$(function(){
+    $('#exec').click(function(){
+        makeTable();
+    })
+})
