@@ -3,7 +3,6 @@ const path = require('path');
 module.exports = {
     mode: "development",
     entry: {
-        jsstore: './src/jsstore.js',
         sqlweb: './src/sqlweb.js'
     },
     output: {
