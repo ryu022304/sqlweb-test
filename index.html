@@ -8,12 +8,20 @@
 </head>
 <body>
     <h1>Hello SQL Web!</h1>
-
+    <h2>SQL example</h2>
+    <ul>
+        <li>select * from TABLENAME;</li>
+        <li>insert into TABLENAME value(COL1: VAL1, COL2: VAL2, COL3: VAL3);</li>
+    </ul>
+    <h2>Try SQL</h2>
     <form id="sql-form">
         <input type="text" name="sql-form" placeholder="Input SQL Query" />
     </form>
     <input id="exec" type="button" value="EXEC">
-    <div id="table"></div>
+    <h2>SQL Result</h2>
+    <div id="sql-result"></div>
+    <h2>Table</h2>
+    <div id="now-table"></div>
     <script src="dist/sqlweb.bundle.js"></script>
 </body>
 </html>

@@ -35,6 +35,9 @@ const tbName = "sample_tb";
 // indexedDBの初期化
 initJsStore();
 
+// データの表示
+makeNowTable();
+
 // データの参照
 getTbData().then(res=>{
     console.log(res);
@@ -69,7 +72,7 @@ function addData(){
 }
 
 function getTbData() {
-    return con.runSql(`select from ${tbName}`);
+    return con.runSql(`select * from ${tbName}`);
 }
 
 function getDbQuery() {
@@ -84,12 +87,16 @@ club STRING NOTNULL
     return dbCreatequery;
 }
 
-// 表の動的作成
-function makeTable(){
+// 入力されたSQLの実行
+function execSql(){
     var sql = $('#sql-form [name=sql-form]').val();
     console.log(sql);
+}
+
+// 表の動的作成
+function makeNowTable(){
     // 表を一旦削除
-    document.getElementById("table").textContent = null;
+    document.getElementById("now-table").textContent = null;
     // 表の作成開始
     var rows=[];
     var table = document.createElement("table");
@@ -105,12 +112,13 @@ function makeTable(){
             }
         }
         // 指定したdiv要素に表を加える
-        document.getElementById("table").appendChild(table);
+        document.getElementById("now-table").appendChild(table);
     });
 }
 
 $(function(){
     $('#exec').click(function(){
-        makeTable();
+        execSql();
+        makeNowTable();
     })
 })
