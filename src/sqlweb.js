@@ -35,9 +35,6 @@ const tbName = "sample_tb";
 // indexedDBの初期化
 initJsStore();
 
-// データの追加
-addData();
-
 // データの参照
 getTbData().then(res=>{
     console.log(res);
@@ -51,6 +48,8 @@ function initJsStore(){
         } else {
             const qry = getDbQuery();
             con.runSql(qry);
+            // 初期データの追加
+            addData();
         }
     }).catch(err => {
         console.error(err);
@@ -58,10 +57,15 @@ function initJsStore(){
 }
 
 function addData(){
-    const qry = `insert into ${tbName} values ({name:'TARO', club:'baseball'})`;
-    con.runSql(qry).then(res => {
-        return res;
-    });
+    const data = [
+        {name:'TARO', club:'baseball'},
+        {name:'JIRO', club:'soccer'},
+        {name:'SABU', club:'tennis'},
+    ]
+    data.forEach(val =>{
+        const qry = `insert into ${tbName} values ({name: '${val.name}', club: '${val.club}'})`;
+        con.runSql(qry);
+    })
 }
 
 function getTbData() {
@@ -91,14 +95,11 @@ function makeTable(){
     var table = document.createElement("table");
 
     getTbData().then(data=>{
-        console.log(data);
-        console.log(Object.keys(data[0]).length);
         // 表に2次元配列の要素を格納
         for(var i = 0; i < data.length; i++){
             rows.push(table.insertRow(-1));  // 行の追加
             //console.log(rows);
             for(var row in data[i]){
-                console.log(row);
                 var cell=rows[i].insertCell(-1);
                 cell.appendChild(document.createTextNode(data[i][row]));
             }
