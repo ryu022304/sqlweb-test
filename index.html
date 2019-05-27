@@ -4,11 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>SQL Web Test Page</title>
+    <title>SqlWeb Test Page</title>
 </head>
 <body>
-    <h1>Hello SQL Web!</h1>
-    <h2>SQL example</h2>
+    <h1>Hello SqlWeb!</h1>
+    <h2>Available SQL example</h2>
     <ul>
         <li>select * from TABLENAME;</li>
         <li>insert into TABLENAME value(COL1: VAL1, COL2: VAL2, COL3: VAL3);</li>
@@ -22,6 +22,10 @@
     <div id="sql-result"></div>
     <h2>Table</h2>
     <div id="now-table"></div>
-    <script src="dist/sqlweb.bundle.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jsstore/dist/jsstore.worker.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jsstore/dist/jsstore.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sqlweb/dist/sqlweb.min.js"></script>
+    <script src="src/sqlweb.js"></script>
 </body>
 </html>

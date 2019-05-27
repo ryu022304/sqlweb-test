@@ -1,32 +1,6 @@
-import * as JsStore from "jsstore";
-import * as SqlWeb from 'sqlweb';
-const $ =  require('jquery');
-
-// バックグラウンドで動かすためのWeb workerの設定
-const workerPath = require("file-loader?name=scripts/jsstore.worker.js!../node_modules/jsstore/dist/jsstore.worker");
-// --------------------------------------------------
-// https://tshino.hatenablog.com/entry/20180106/1515218776
-var newWorkerViaBlob = function(relativePath) {
-    var baseURL = window.location.href.replace(/\\/g, '/').replace(/\/[^\/]*$/, '/');
-    var array = ['importScripts("' + baseURL + relativePath + '");'];
-    var blob = new Blob(array, {type: 'text/javascript'});
-    var url = window.URL.createObjectURL(blob);
-    return new Worker(url);
-  };
-
-var newWorker = function(relativePath) {
-    try {
-        return newWorkerViaBlob(relativePath);
-    } catch (e) {
-        return new Worker(relativePath);
-    }
-};
-const worker = newWorker('dist/'+workerPath);
-// --------------------------------------------------
-
 // SQL Webを使用する宣言
 JsStore.useSqlWeb(SqlWeb);
-const con = new JsStore.Instance(worker);
+const con = new JsStore.Instance(new Worker("src/jsstore.worker.min.js"));
 
 // indexedDBの設定
 const dbName = "sample_db";
@@ -44,13 +18,16 @@ getTbData().then(res=>{
 });
 
 function initJsStore(){
+    //let qry = new SqlWeb.Query(`ISDBEXIST ${dbName}`);
     con.runSql(`ISDBEXIST ${dbName}`).then((isExist) => {
         if (isExist) {
-            const qry = 'OPENDB ' + dbName;
-            con.runSql(qry);
+            let q = new SqlWeb.Query('OPENDB ' + dbName);
+            con.runSql(q);
         } else {
-            const qry = getDbQuery();
-            con.runSql(qry);
+            console.log(isExist);
+            //let q = new SqlWeb.Query('DEFINE DB '+ dbName);
+            //con.runSql('DEFINE DB '+ dbName);
+            con.runSql('DEFINE DB tests');
             // 初期データの追加
             addData();
         }
@@ -66,23 +43,19 @@ function addData(){
         {name:'SABU', club:'tennis'},
     ]
     data.forEach(val =>{
-        const qry = `insert into ${tbName} values ({name: '${val.name}', club: '${val.club}'})`;
+        const qry = new SqlWeb.Query(`insert into ${tbName} values ({name: '${val.name}', club: '${val.club}'})`);
         con.runSql(qry);
     })
 }
 
 function getTbData() {
-    return con.runSql(`select * from ${tbName}`);
+    const qry = new SqlWeb.Query(`select * from ${tbName}`);
+    return con.runSql(qry);
 }
 
 function getDbQuery() {
     const db = `DEFINE DB ${dbName};`;
-    const tblSampleQry = `
-DEFINE TABLE ${tbName}(
-id PRIMARYKEY AUTOINCREMENT,
-name STRING NOTNULL ,
-club STRING NOTNULL
-);`;
+    const tblSampleQry = `DEFINE TABLE ${tbName}(id PRIMARYKEY AUTOINCREMENT,name STRING NOTNULL ,club STRING NOTNULL);`;
     const dbCreatequery = db + tblSampleQry;
     return dbCreatequery;
 }
