@@ -102,12 +102,20 @@ function makeNowTable(){
     var table = document.createElement("table");
 
     getTbData().then(data=>{
+        // 列のタイトル
+        rows.push(table.insertRow(-1));
+        for(var title in data[0]){
+            var thObj = document.createElement("th");
+            thObj.innerHTML = title;
+            rows[0].appendChild(thObj);
+        }
+
         // 表に2次元配列の要素を格納
         for(var i = 0; i < data.length; i++){
             rows.push(table.insertRow(-1));  // 行の追加
             //console.log(rows);
             for(var row in data[i]){
-                var cell=rows[i].insertCell(-1);
+                var cell=rows[i+1].insertCell(-1);
                 cell.appendChild(document.createTextNode(data[i][row]));
             }
         }
