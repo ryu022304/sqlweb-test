@@ -100,6 +100,7 @@ function makeNowTable(){
     // 表の作成開始
     var rows=[];
     var table = document.createElement("table");
+    table.border = 1;
 
     getTbData().then(data=>{
         // 列のタイトル
