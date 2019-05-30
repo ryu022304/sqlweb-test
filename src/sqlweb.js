@@ -36,7 +36,7 @@ const tbName = "sample_tb";
 initJsStore();
 
 // データの表示
-makeNowTable();
+makeTable('now-table');
 
 // データの参照
 getTbData().then(res=>{
@@ -90,13 +90,18 @@ club STRING NOTNULL
 // 入力されたSQLの実行
 function execSql(){
     var sql = $('#sql-form [name=sql-form]').val();
-    console.log(sql);
+    con.runSql(sql).then(res =>{
+        makeTable('sql-result');
+        makeTable('now-table');
+        console.log(res);
+    })
 }
 
+
 // 表の動的作成
-function makeNowTable(){
+function makeTable(table_id){
     // 表を一旦削除
-    document.getElementById("now-table").textContent = null;
+    document.getElementById(table_id).textContent = null;
     // 表の作成開始
     var rows=[];
     var table = document.createElement("table");
@@ -121,13 +126,12 @@ function makeNowTable(){
             }
         }
         // 指定したdiv要素に表を加える
-        document.getElementById("now-table").appendChild(table);
+        document.getElementById(table_id).appendChild(table);
     });
 }
 
 $(function(){
     $('#exec').click(function(){
         execSql();
-        makeNowTable();
     })
 })
