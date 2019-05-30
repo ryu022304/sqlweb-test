@@ -36,12 +36,7 @@ const tbName = "sample_tb";
 initJsStore();
 
 // データの表示
-makeTable('now-table');
-
-// データの参照
-getTbData().then(res=>{
-    console.log(res);
-});
+getTbData();
 
 function initJsStore(){
     con.runSql(`ISDBEXIST ${dbName}`).then((isExist) => {
@@ -59,6 +54,7 @@ function initJsStore(){
     })
 }
 
+// 初期データの追加
 function addData(){
     const data = [
         {name:'TARO', club:'baseball'},
@@ -71,10 +67,7 @@ function addData(){
     })
 }
 
-function getTbData() {
-    return con.runSql(`select * from ${tbName}`);
-}
-
+// DBとテーブルの初期化
 function getDbQuery() {
     const db = `DEFINE DB ${dbName};`;
     const tblSampleQry = `
@@ -87,19 +80,29 @@ club STRING NOTNULL
     return dbCreatequery;
 }
 
+// 現状のデータの表示
+function getTbData() {
+    con.runSql(`select * from ${tbName}`).then(res => {
+        makeTable('now-table', res);
+    });
+}
+
 // 入力されたSQLの実行
 function execSql(){
     var sql = $('#sql-form [name=sql-form]').val();
-    con.runSql(sql).then(res =>{
-        makeTable('sql-result');
-        makeTable('now-table');
-        console.log(res);
-    })
+    try{
+        con.runSql(sql).then(res =>{
+            makeTable('sql-result', res);
+            getTbData();
+        });
+    }catch(e){
+        alert("Type: "+e.type+" \nMessage: "+ e.message);
+    }
 }
 
 
 // 表の動的作成
-function makeTable(table_id){
+function makeTable(table_id, data){
     // 表を一旦削除
     document.getElementById(table_id).textContent = null;
     // 表の作成開始
@@ -107,27 +110,26 @@ function makeTable(table_id){
     var table = document.createElement("table");
     table.border = 1;
 
-    getTbData().then(data=>{
-        // 列のタイトル
-        rows.push(table.insertRow(-1));
-        for(var title in data[0]){
-            var thObj = document.createElement("th");
-            thObj.innerHTML = title;
-            rows[0].appendChild(thObj);
-        }
+    // 列のタイトル
+    rows.push(table.insertRow(-1));
+    for(var title in data[0]){
+        var thObj = document.createElement("th");
+        thObj.innerHTML = title;
+        rows[0].appendChild(thObj);
+    }
 
-        // 表に2次元配列の要素を格納
-        for(var i = 0; i < data.length; i++){
-            rows.push(table.insertRow(-1));  // 行の追加
-            //console.log(rows);
-            for(var row in data[i]){
-                var cell=rows[i+1].insertCell(-1);
-                cell.appendChild(document.createTextNode(data[i][row]));
-            }
+    // 表に2次元配列の要素を格納
+    for(var i = 0; i < data.length; i++){
+        rows.push(table.insertRow(-1));  // 行の追加
+        //console.log(rows);
+        for(var row in data[i]){
+            var cell=rows[i+1].insertCell(-1);
+            cell.appendChild(document.createTextNode(data[i][row]));
         }
-        // 指定したdiv要素に表を加える
-        document.getElementById(table_id).appendChild(table);
-    });
+    }
+    // 指定したdiv要素に表を加える
+    document.getElementById(table_id).appendChild(table);
+    
 }
 
 $(function(){
