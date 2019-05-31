@@ -92,7 +92,17 @@ function execSql(){
     var sql = $('#sql-form [name=sql-form]').val();
     try{
         con.runSql(sql).then(res =>{
-            makeTable('sql-result', res);
+            // 結果がObjectだったら表を作る
+            if(typeof res == 'object'){
+                makeTable('sql-result', res);
+            }
+            else{
+                document.getElementById('sql-result').textContent = null;
+                var p = document.createElement('p');
+                p.textContent = res;
+                document.getElementById('sql-result').appendChild(p);
+            }
+            
             getTbData();
         });
     }catch(e){
