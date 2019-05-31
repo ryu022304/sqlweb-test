@@ -38,6 +38,13 @@ initJsStore();
 // データの表示
 getTbData();
 
+// ボタンが押された時実行
+$(function(){
+    $('#exec').click(function(){
+        execSql();
+    })
+})
+
 function initJsStore(){
     con.runSql(`ISDBEXIST ${dbName}`).then((isExist) => {
         if (isExist) {
@@ -96,6 +103,7 @@ function execSql(){
             if(typeof res == 'object'){
                 makeTable('sql-result', res);
             }
+            // それ以外だとそのまま表示する
             else{
                 document.getElementById('sql-result').textContent = null;
                 var p = document.createElement('p');
@@ -138,12 +146,5 @@ function makeTable(table_id, data){
         }
     }
     // 指定したdiv要素に表を加える
-    document.getElementById(table_id).appendChild(table);
-    
+    document.getElementById(table_id).appendChild(table);   
 }
-
-$(function(){
-    $('#exec').click(function(){
-        execSql();
-    })
-})

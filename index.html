@@ -1,21 +1,29 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>SQL Web Test Page</title>
+    <title>SqlWeb Test Page</title>
 </head>
 <body>
-    <h1>Hello SQL Web!</h1>
-    <h2>SQL example</h2>
+    <h1>Hello SqlWeb!</h1>
+    This is the test page for <a href="https://github.com/ujjwalguptaofficial/sqlweb">SqlWeb</a>
+    <h2>How to check IndexedDB status</h2>
+    <ol>
+        <li>Open developper tools (Win: Ctr+Shift+i, Mac: Option+Command+i)</li>
+        <li>Go to Application tab(Chrome) or Storage tab(Firefox)</li>
+        <li>Check items of IndexedDB</li>
+    </ol>
+
+    <h2>Available SQL example</h2>
     <ul>
         <li>select * from TABLENAME</li>
         <li>select * from TABLENAME where COL = 'VAL'</li>
         <li>insert into TABLENAME value(COL1: VAL1, COL2: VAL2, COL3: VAL3)</li>
         <li>count * from TABLENAME</li>
     </ul>
-    For details, see  <a href="https://github.com/ujjwalguptaofficial/sqlweb/wiki">sqlweb</a>
+    For details, see  <a href="https://github.com/ujjwalguptaofficial/sqlweb/wiki">here</a>
 
     <h2>Try SQL</h2>
     <p>DB: sample_db <br>
@@ -24,10 +32,13 @@
         <input type="text" name="sql-form" placeholder="Input SQL Query" />
     </form>
     <input id="exec" type="button" value="EXEC">
+    
     <h2>SQL Result</h2>
     <div id="sql-result"></div>
-    <h2>Current Table</h2>
+
+    <h2>Current Sample Table</h2>
     <div id="now-table"></div>
     <script src="dist/sqlweb.bundle.js"></script>
+
 </body>
 </html>
