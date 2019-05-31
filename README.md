@@ -11,7 +11,7 @@ You can see that you can use SQL to operate IndexedDB by SqlWeb.
 
 ## Installation
 ```
-$ clone https://github.com/ryu022304/sqlweb-test
+$ git clone https://github.com/ryu022304/sqlweb-test
 $ cd sqlweb-test
 $ npm i
 $ webpack
